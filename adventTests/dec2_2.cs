@@ -38,17 +38,33 @@ public class ElfRockPaperScissorTests
     }
 
     [Theory]
-    [InlineData(MoveChoice2.Rock, MoveChoice2.Rock, false, true, 3)]
+    [InlineData(MoveChoice2.Rock, MoveChoice2.Rock, MoveChoice2.Scissors)]
+    [InlineData(MoveChoice2.Rock, MoveChoice2.Paper, MoveChoice2.Rock)]
+    [InlineData(MoveChoice2.Rock, MoveChoice2.Scissors, MoveChoice2.Paper)]
+    [InlineData(MoveChoice2.Paper, MoveChoice2.Rock, MoveChoice2.Rock)]
+    [InlineData(MoveChoice2.Paper, MoveChoice2.Paper, MoveChoice2.Paper)]
+    [InlineData(MoveChoice2.Paper, MoveChoice2.Scissors, MoveChoice2.Scissors)]
+    [InlineData(MoveChoice2.Scissors, MoveChoice2.Rock, MoveChoice2.Paper)]
+    [InlineData(MoveChoice2.Scissors, MoveChoice2.Paper, MoveChoice2.Scissors)]
+    [InlineData(MoveChoice2.Scissors, MoveChoice2.Scissors, MoveChoice2.Rock)]
+    public void ValidChoices2(MoveChoice2 myChoice, MoveChoice2 opponenChoice, MoveChoice2 expectedChoice)
+    {
+        var choice = new RockPaperScissorGameChoice2(opponenChoice, myChoice);
+        choice.Choice.Should().Be(expectedChoice);
+    }
+
+    [Theory]
+    [InlineData(MoveChoice2.Rock, MoveChoice2.Rock, false, false, 4)]
     [InlineData(MoveChoice2.Rock, MoveChoice2.Paper, false, true, 1)]
-    [InlineData(MoveChoice2.Rock, MoveChoice2.Scissors, false, true, 2)]
-    [InlineData(MoveChoice2.Paper, MoveChoice2.Rock, false, false, 4)]
+    [InlineData(MoveChoice2.Rock, MoveChoice2.Scissors, true, false, 7)]
+    [InlineData(MoveChoice2.Paper, MoveChoice2.Rock, true, false, 8)]
     [InlineData(MoveChoice2.Paper, MoveChoice2.Paper, false, false, 5)]
-    [InlineData(MoveChoice2.Paper, MoveChoice2.Scissors, false, false, 6)]
-    [InlineData(MoveChoice2.Scissors, MoveChoice2.Rock, true, false, 8)]
+    [InlineData(MoveChoice2.Paper, MoveChoice2.Scissors, false, true, 2)]
+    [InlineData(MoveChoice2.Scissors, MoveChoice2.Rock, false, true, 3)]
     [InlineData(MoveChoice2.Scissors, MoveChoice2.Paper, true, false, 9)]
-    [InlineData(MoveChoice2.Scissors, MoveChoice2.Scissors, true, false, 7)]
+    [InlineData(MoveChoice2.Scissors, MoveChoice2.Scissors, false, false, 6)]
     public void WinningRounds(MoveChoice2 me, MoveChoice2 them, bool expectMeToWin, bool expectThemToWin,
-    int expectedTotalPoints)
+      int expectedTotalPoints)
     {
         var myChoice = new RockPaperScissorGameChoice2(me);
         var theirChoice = new RockPaperScissorGameChoice2(them);

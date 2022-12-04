@@ -82,8 +82,10 @@ public class RockPaperScissorGame2
         if (choices.Length != 2)
             throw new System.Exception($"Bad line. {line}");
         var list = new List<RockPaperScissorGameChoice2>();
-        list.Add(new RockPaperScissorGameChoice2(choices[0]));
-        list.Add(new RockPaperScissorGameChoice2(choices[1]));
+        var theirs = new RockPaperScissorGameChoice2(choices[0]);
+        var expectedOutcome = new RockPaperScissorGameChoice2(choices[1]);
+        list.Add(theirs);
+        list.Add(new RockPaperScissorGameChoice2(theirs.Choice, expectedOutcome.Choice));
         return list;
     }
 
@@ -106,6 +108,44 @@ public class RockPaperScissorGameChoice2
     public RockPaperScissorGameChoice2(MoveChoice2 choice)
     {
         this.Choice = choice;
+    }
+
+    public RockPaperScissorGameChoice2(MoveChoice2 theirs, MoveChoice2 mine)
+    {
+        if (mine == RockPaperScissorGameChoice2.MoveChoice2.Rock)
+        {
+            Choice = Lose(theirs);
+
+        }
+        else if (mine == RockPaperScissorGameChoice2.MoveChoice2.Paper)
+        {
+            Choice = theirs;
+        }
+        else if (mine == RockPaperScissorGameChoice2.MoveChoice2.Scissors)
+        {
+
+            Choice = Win(theirs);
+        }
+    }
+
+    private RockPaperScissorGameChoice2.MoveChoice2 Lose(RockPaperScissorGameChoice2.MoveChoice2 theirChoice)
+    {
+        if (theirChoice == RockPaperScissorGameChoice2.MoveChoice2.Paper)
+            return RockPaperScissorGameChoice2.MoveChoice2.Rock;
+        if (theirChoice == RockPaperScissorGameChoice2.MoveChoice2.Rock)
+            return RockPaperScissorGameChoice2.MoveChoice2.Scissors;
+        else
+            return RockPaperScissorGameChoice2.MoveChoice2.Paper;
+    }
+
+    private RockPaperScissorGameChoice2.MoveChoice2 Win(RockPaperScissorGameChoice2.MoveChoice2 theirChoice)
+    {
+        if (theirChoice == RockPaperScissorGameChoice2.MoveChoice2.Paper)
+            return RockPaperScissorGameChoice2.MoveChoice2.Scissors;
+        if (theirChoice == RockPaperScissorGameChoice2.MoveChoice2.Rock)
+            return RockPaperScissorGameChoice2.MoveChoice2.Paper;
+        else
+            return RockPaperScissorGameChoice2.MoveChoice2.Rock;
     }
     public RockPaperScissorGameChoice2(string character)
     {
@@ -134,43 +174,27 @@ public class RockPaperScissorGameRound2
         TotalPoints = 0;
         Me = me;
         Them = them;
-        if (Me.Choice == RockPaperScissorGameChoice2.MoveChoice2.Rock)
-        {
-            Me = new RockPaperScissorGameChoice2(Lose(Them.Choice));
-            TheyWon = true;
-        }
-        else if (Me.Choice == RockPaperScissorGameChoice2.MoveChoice2.Paper)
-        {
-            Me = new RockPaperScissorGameChoice2(Them.Choice);
-        }
-        else if (Me.Choice == RockPaperScissorGameChoice2.MoveChoice2.Scissors)
-        {
-            IWon = true;
-            Me = new RockPaperScissorGameChoice2(Win(Them.Choice));
-        }
+
+        TotalPoints = 0;
+        Me = me;
+        Them = them;
+
+        if (me.Choice == RockPaperScissorGameChoice2.MoveChoice2.Rock)
+            TheyWon = (Them.Choice == RockPaperScissorGameChoice2.MoveChoice2.Paper);
+        else if (me.Choice == RockPaperScissorGameChoice2.MoveChoice2.Paper)
+            TheyWon = (Them.Choice == RockPaperScissorGameChoice2.MoveChoice2.Scissors);
+        else if (me.Choice == RockPaperScissorGameChoice2.MoveChoice2.Scissors)
+            TheyWon = (Them.Choice == RockPaperScissorGameChoice2.MoveChoice2.Rock);
+
+        if (Them.Choice == Me.Choice)
+            IWon = false;
+        else
+            IWon = !TheyWon;
 
         SetPoints(Me.Choice, Them.Choice);
     }
 
-    private RockPaperScissorGameChoice2.MoveChoice2 Lose(RockPaperScissorGameChoice2.MoveChoice2 theirChoice)
-    {
-        if (theirChoice == RockPaperScissorGameChoice2.MoveChoice2.Paper)
-            return RockPaperScissorGameChoice2.MoveChoice2.Rock;
-        if (theirChoice == RockPaperScissorGameChoice2.MoveChoice2.Rock)
-            return RockPaperScissorGameChoice2.MoveChoice2.Scissors;
-        else
-            return RockPaperScissorGameChoice2.MoveChoice2.Paper;
-    }
 
-    private RockPaperScissorGameChoice2.MoveChoice2 Win(RockPaperScissorGameChoice2.MoveChoice2 theirChoice)
-    {
-        if (theirChoice == RockPaperScissorGameChoice2.MoveChoice2.Paper)
-            return RockPaperScissorGameChoice2.MoveChoice2.Scissors;
-        if (theirChoice == RockPaperScissorGameChoice2.MoveChoice2.Rock)
-            return RockPaperScissorGameChoice2.MoveChoice2.Paper;
-        else
-            return RockPaperScissorGameChoice2.MoveChoice2.Rock;
-    }
 
     private void SetPoints(RockPaperScissorGameChoice2.MoveChoice2 me, RockPaperScissorGameChoice2.MoveChoice2 them)
     {
