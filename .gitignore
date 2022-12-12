@@ -262,3 +262,6 @@ FakesAssemblies/
 # Visual Studio 6 workspace options file
 *.opt
 day3part2/.DS_Store
+tasks.json
+package-lock.json
+launch.json
