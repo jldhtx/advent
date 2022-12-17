@@ -1,0 +1,16 @@
+30373
+25512
+65332
+33549
+35390
+
+Loop left to right top to bottom
+
+Row 1 - all visible, build array
+Row 2, col1 - col 1 visible, 
+Row 2, col2 - visible if 2,2 > 2,1 || col 2,2 > 1,2 || 2,2 > 2,3-5
+row 2, col 3 - visible if 2,3 > 2,1 & 2,2 || 
+
+
+if row = 1 or max or column = 1 or max then visible is true
+
